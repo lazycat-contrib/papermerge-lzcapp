@@ -1,0 +1,53 @@
+application:
+  subdomain: papermerge
+  multi_instance: false
+  upstreams:
+    - location: /package-licenses/
+      backend: file:///lzcapp/pkg/content/licenses/
+    - location: /
+      backend: http://papermerge:8000/
+
+services:
+  papermerge:
+    # upstream: linuxserver/papermerge:2.1.5
+    image: docker.1ms.run/linuxserver/papermerge:2.1.5
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Asia/Shanghai
+      # Required: Django refuses to boot without a secret key.
+      - |-
+        PAPERMERGE__MAIN__SECRET_KEY={{ stable_secret "papermerge_secret_key" | replace "\r" "" | replace "\n" "" }}
+      # The image creates the initial superuser from these on first start.
+      - |-
+        DJANGO_SUPERUSER_USERNAME={{ .U.admin_username }}
+      - |-
+        DJANGO_SUPERUSER_PASSWORD={{ .U.admin_password }}
+      - |-
+        DJANGO_SUPERUSER_EMAIL={{ .U.admin_email }}
+      # SQLite keeps this a single-container app; data lives under /config.
+      - PAPERMERGE__DATABASE__TYPE=sqlite
+    binds:
+      - /lzcapp/var/config:/config
+
+usage: |
+  Papermerge 是面向扫描件的文档管理系统：OCR 识别、归档，并按内容全文检索。
+
+  使用方法：
+  1. 打开应用，用你安装时设置的管理员用户名和密码登录。
+  2. 点上传，把扫描的 PDF 或图片放进来；后台会自动做 OCR 提取文字。
+  3. 给文档打标签、归到文件夹里，也可以建多个工作区分别管理。
+  4. 之后在搜索框里按关键词就能找到文档内容，不必记得文件名。
+
+  数据与安全：
+  - 文档与索引都在 /lzcapp/var/config，卸载应用会一并删除，请定期备份
+    （也可以在应用内把文档下载存档）。
+  - 管理员账号密码来自安装参数，密码默认随机生成，不存在内置弱口令。
+  - 应用内部密钥由平台稳定密钥生成，每个部署不同。
+  - 应用经懒猫入口鉴权访问。
+
+  说明：
+  - 单容器部署，使用内置 SQLite，无需额外数据库。
+  - OCR 与全文检索在容器内完成；处理大文件时会占用较多 CPU，请耐心等待。
+  - 未配置邮件服务，邀请成员与找回密码等依赖邮件的功能不可用。
+  - 未做真机验证：登录、上传扫描件、OCR 识别、全文检索以及重启后持久化均未在设备上实测。

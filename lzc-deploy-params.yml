@@ -1,0 +1,30 @@
+params:
+  - id: admin_username
+    type: string
+    name: Admin username
+    description: "Username of the initial administrator account."
+    default_value: "admin"
+    optional: false
+  - id: admin_password
+    type: secret
+    name: Admin password
+    description: "Password of the initial administrator account, at least 12 characters."
+    default_value: "$random(len=20)"
+    optional: false
+  - id: admin_email
+    type: string
+    name: Admin email
+    description: "Email of the initial administrator account."
+    default_value: "admin@example.com"
+    optional: false
+locales:
+  zh:
+    admin_username:
+      name: 管理员用户名
+      description: 初始管理员账号的用户名。
+    admin_password:
+      name: 管理员密码
+      description: 初始管理员账号的密码，至少 12 位。默认随机生成，不存在内置弱口令。
+    admin_email:
+      name: 管理员邮箱
+      description: 初始管理员账号的邮箱。

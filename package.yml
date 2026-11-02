@@ -1,0 +1,18 @@
+package: community.lazycat.app.papermerge
+name: Papermerge
+version: 0.0.0
+description: "Document management for scanned papers: OCR, archive and full-text search your PDFs."
+min_os_version: "1.5.0"
+homepage: https://papermerge.com/
+author: Papermerge
+license: Apache-2.0
+permissions:
+  required:
+    - net.internet
+locales:
+  zh:
+    name: Papermerge
+    description: "扫描文档管理：OCR 识别、归档和全文检索，把纸质资料变成可搜索的电子档案。"
+  en:
+    name: Papermerge
+    description: "Document management for scanned papers: OCR, archive and full-text search your PDFs."
