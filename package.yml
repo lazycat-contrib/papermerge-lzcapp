@@ -1,6 +1,6 @@
 package: community.lazycat.app.papermerge
 name: Papermerge
-version: 0.0.0
+version: 2.1.5
 description: "Document management for scanned papers: OCR, archive and full-text search your PDFs."
 min_os_version: "1.5.0"
 homepage: https://papermerge.com/
